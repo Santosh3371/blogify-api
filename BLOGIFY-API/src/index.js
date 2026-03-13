@@ -1,17 +1,20 @@
-const http = require('http');
-
-const { logMessage } = require('./utils/log');
-
-const server = http.createServer((req, res) => {
-
-  logMessage('A new request was received!'); 
-
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('Hello, World!');
-});
-
+const express = require('express');
+const app = express();
 const PORT = 3000;
 
-server.listen(PORT, () => {
-  console.log(`Server is attempting to run at http://localhost:${PORT}/`);
+// 1. Import our new post router
+const postRouter = require('./routes/posts.routes.js');
+
+// Main welcome route
+app.get('/', (req, res) => {
+res.send('Welcome to the Blogify API!');
+});
+
+// 2. Mount the router
+// This tells Express: "For any request that starts with /api/v1/posts,
+// hand it over to the postRouter to handle."
+app.use('/api/v1/posts', postRouter);
+
+app.listen(PORT, () => {
+console.log(`Server is running at http://localhost:${PORT}/`);
 });
